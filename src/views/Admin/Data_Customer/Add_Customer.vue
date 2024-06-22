@@ -8,7 +8,7 @@
     >
       <div>
         <!-- Form for adding a customer -->
-        <form @submit.prevent="AddCustomer" class="p-6">
+        <form @submit.prevent="f" class="p-6">
           <!-- Modal header -->
           <div class="flex items-center justify-between pb-4 border-b">
             <h3 class="text-lg font-semibold">

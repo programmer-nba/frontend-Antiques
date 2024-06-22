@@ -1,94 +1,102 @@
 <template>
-  <div class="relative bg-gray-100 min-h-screen flex flex-col">
-    <div class="flex-grow flex items-center justify-center relative">
-      <!-- Login Form -->
-      <div class="relative z-10 bg-white p-10 rounded-md shadow-lg form-animation sm:w-3/3 md:w-2/3 lg:w-1/3"
-        style="opacity: 0.9">
-        <h1 class="text-xl font-bold mb-10 text-center">เข้าสู่ระบบ</h1>
-        <form @submit.prevent="submit" class="space-y-4">
-          <div class="mb-4">
-            <label class="block font-semibold text-gray-700 mb-2" for="email">
-              ชื่อผู้ใช้
-            </label>
-            <input
-              class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email" type="text" placeholder="กรอกชื่อผู้ใช้" required v-model="username" />
-          </div>
-          <div class="mb-4">
-            <label class="block font-semibold text-gray-700 mb-2" for="password">
-              รหัสผ่าน
-            </label>
-            <input
-              class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="password" type="password" placeholder="กรอกรหัสผ่าน" required v-model="password" />
-          </div>
-          <div class="mb-6">
-            <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-              type="submit">
-              เข้าสู่ระบบ
-            </button>
-          </div>
-        </form>
+<!-- This is an example component -->
+<!-- component -->
+<div class="flex h-screen w-full items-center justify-center bg-green-500 bg-cover bg-no-repeat login">
+  <div class="rounded-xl bg-green-800 bg-opacity-75 px-24 py-6 shadow-lg max-sm:px-12">
+    <div class="text-white">
+      <div class="mb-8 flex flex-col items-center">
+        <div class="mx-auto mb-2 overflow-hidden bg-white rounded-xl">
+          <img src="@/assets/images/logo.png" width="150" alt="" srcset="" />
+        </div>
+        <h1 class="text-3xl">เข้าสู่ระบบ</h1>
+      </div>
+      
+      <div class="mb-6 text-xl">
+        <label class="block font-semibold text-gray-100 mb-2" for="email">
+          ชื่อผู้ใช้
+        </label>
+        <input v-model="username" @keyup.enter="submit" class="w-80 rounded-3xl border-none bg-green-400 bg-opacity-50 px-8 py-4 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="text"  placeholder="กรอกชื่อผู้ใช้" />
       </div>
 
-      <img src="@/assets/images/001CN1.jpg" alt="Background"
-        class="absolute w-full h-full max-h-full object-cover z-0 inset-0" />
+      <div class="mb-6 text-xl">
+        <label class="block font-semibold text-gray-100 mb-2" for="password">
+          รหัสผ่าน
+        </label>
+        <input v-model="password" @keyup.enter="submit" class="w-80 rounded-3xl border-none bg-green-400 bg-opacity-50 px-8 py-4 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="password"  placeholder="*********" />
+      </div>
+      
+      <div class="mt-10 flex justify-center text-xl text-black">
+        <button  @click="submit" class="rounded-3xl bg-white px-12 py-4 text-green-600 shadow-xl z-20 duration-300 hover:bg-[#9BEC00]">เข้าสู่ระบบ</button>
+      </div>
     </div>
-    <footer class="bg-lime-900 text-white px-4 py-2 text-center z-10">
-      This is the footer content.
-    </footer>
   </div>
+</div>
+
+
 </template>
 
-<script>
-import axios from "axios";
-export default {
-  data: () => ({
-    username: "",
-    password: "",
-  }),
-  methods: {
-    async submit() {
-      if (this.username === "") {
-        this.$toast.add({
-          severity: "warn",
-          summary: "แจ้งเตือน",
-          detail: "กรุณากรอกไอดีผู้ใช้",
-          life: 3000,
-        });
-        return false;
-      }
-      if (this.password === "") {
-        this.$toast.add({
-          severity: "warn",
-          summary: "แจ้งเตือน",
-          detail: "กรุณากรอกรหัสผ่าน",
-          life: 3000,
-        });
-        return false;
-      }
-      await axios.post(`${process.env.VITE_API_ALL}login`, {
-        username: this.username,
-        password: this.password,
-      }).then((res) => {
-        localStorage.setItem('token', res.data.token);
-        window.location.assign('/');
-      }).catch(() => {
-        this.$toast.add({
-          severity: "warn",
-          summary: "แจ้งเตือน",
-          detail: "ไม่พบข้อมูลผู้ใช้งาน",
-          life: 3000,
-        });
-        return false;
-      })
-    },
-  },
+<script setup>
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { ref } from 'vue';
+
+const username = ref('');
+const password = ref('');
+
+const submit = async () => {
+  if (!username.value) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'แจ้งเตือน',
+      text: 'กรุณากรอกไอดีผู้ใช้',
+      timer: 3000,
+      timerProgressBar: true,
+    });
+    return;
+  }
+  if (!password.value) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'แจ้งเตือน',
+      text: 'กรุณากรอกรหัสผ่าน',
+      timer: 3000,
+      timerProgressBar: true,
+    });
+    return;
+  }
+
+  try {
+    const res = await axios.post(`${process.env.VITE_API_ALL}login`, {
+      username: username.value,
+      password: password.value,
+    });
+    localStorage.setItem('token', res.data.token);
+    window.location.assign('/');
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'แจ้งเตือน',
+      text: error.response.data.message,
+      timer: 1500,
+      timerProgressBar: true,
+    });
+  }
 };
 </script>
 
-<style>
+
+
+
+
+<style scoped>
+  .login{
+  /*
+    background: url('https://tailwindadmin.netlify.app/dist/images/login-new.jpeg');
+  */
+  background: url('@/assets/images/001CN1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .form-animation {
   animation: formAppear 1s ease-in-out;
 }

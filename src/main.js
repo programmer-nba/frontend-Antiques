@@ -10,12 +10,11 @@ import routerEmployee from "./router/Employee";
 import "./assets/main.css";
 import "./assets/index.css";
 
-import PrimeVue from "primevue/config"
+import PrimeVue from "primevue/config";
 import "primeicons/primeicons.css" //icons
 import "primevue/resources/primevue.min.css" //core css
 import "primevue/resources/themes/lara-light-purple/theme.css" //theme
 //prime flex
-import "primeflex/primeflex.css"
 
 import Toast from "primevue/toast"
 import ToastService from "primevue/toastservice"

@@ -20,7 +20,7 @@
 <script setup>
 import Employees from "./Data/Cus.vue";
 import Customer from "./Data/Emp.vue";
-import Report from "./Data/Report.vue";
+import Report from "./Data/report.vue";
 </script>
 
 <style scoped>
