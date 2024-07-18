@@ -1,33 +1,22 @@
 <template>
   <div class="text-2xl">
-    <div class="p-4">
-      <h1 class="text-3xl">พนักงาน</h1>
+    <div class="p-4 text-center">
+      <h1 class="text-3xl font-bold">พนักงาน</h1>
     </div>
 
     <div class="flex justify-end py-2 px-3">
       <div class="mr-4">
-        <input
-          v-model="searchTerm"
-          type="text"
-          class="border border-gray-300 rounded-md py-2 px-4"
-          placeholder="ค้นหาชื่อหรือเบอร์โทร"
-        />
+        <input v-model="searchTerm" type="text" class="border border-gray-300 rounded-md py-2 px-4"
+          placeholder="ค้นหาชื่อหรือเบอร์โทร" />
       </div>
     </div>
 
     <div class="flex justify-end py-2 px-3">
-      <button
-        @click="openAddPopup()"
-        class="focus:ring-2 focus:ring-offset-2 mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-600 hover:bg-indigo-500 focus:outline-none rounded"
-      >
+      <button @click="openAddPopup()"
+        class="focus:ring-2 focus:ring-offset-2 mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-600 hover:bg-indigo-500 focus:outline-none rounded">
         <p class="text-sm font-medium leading-none text-white">เพิ่มพนักงาน</p>
       </button>
-      <AddEmployee
-        v-if="showAddPopup"
-        @close="closeAddPopup"
-        @add="addEmployee"
-        @added="fetchEmployees"
-      />
+      <AddEmployee v-if="showAddPopup" @close="closeAddPopup" @add="addEmployee" @added="fetchEmployees" />
     </div>
 
     <div class="px-4 flex justify-center">
@@ -37,57 +26,38 @@
             <tr class="border-b">
               <th class="text-left p-3 px-5">ลำดับ</th>
               <th class="text-left p-3 px-5">ชื่อ</th>
+              <th class="text-left p-3 px-5">นามสกุล</th>
               <th class="text-left p-3 px-5">เบอร์โทร</th>
               <th class="text-left p-3 px-5">ตำแหน่ง</th>
               <th class="text-left p-3 px-5">สถานะ</th>
               <th class="flex justify-center p-3 px-5">จัดการ</th>
             </tr>
-            <tr
-              v-for="(employee, index) in displayedEmployees"
-              :key="employee._id"
-              class="border-b hover:bg-gray-300 bg-gray-100 border border-green-300"
-            >
+            <tr v-for="(employee, index) in displayedEmployees" :key="employee._id"
+              class="border-b hover:bg-gray-300 bg-gray-100 border border-green-300">
               <td class="p-3 px-5">{{ index + 1 }}</td>
-              <td class="p-3 px-5">{{ employee.employee_name }}</td>
-              <td class="p-3 px-5">{{ employee.employee_phone }}</td>
-              <td class="p-3 px-5">{{ employee.employee_position }}</td>
+              <td class="p-3 px-5">{{ employee.fristname }}</td>
+              <td class="p-3 px-5">{{ employee.lastname }}</td>
+              <td class="p-3 px-5">{{ employee.tel }}</td>
+              <td class="p-3 px-5">{{ employee.position }}</td>
               <td class="p-3 px-5">
                 {{ employee.employee_status ? "เปิด" : "ปิด" }}
               </td>
               <td class="p-3 px-5 flex justify-center">
-                <button
-                  @click="viewEmployee(employee)"
-                  type="button"
-                  class="text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 ml-3 rounded focus:outline-none focus:shadow-outline"
-                >
+                <button @click="viewEmployee(employee)" type="button"
+                  class="text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 ml-3 rounded focus:outline-none focus:shadow-outline">
                   ข้อมูล
                 </button>
-                <ViewEmployee
-                  v-if="showViewPopup"
-                  :employee="selectedEmployee"
-                  @close="closeViewPopup"
-                />
+                <ViewEmployee v-if="showViewPopup" :employee="selectedEmployee" @close="closeViewPopup" />
 
-                <button
-                  @click="editEmployee(employee)"
-                  type="button"
-                  class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 ml-3 rounded focus:outline-none focus:shadow-outline"
-                >
+                <button @click="editEmployee(employee)" type="button"
+                  class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 ml-3 rounded focus:outline-none focus:shadow-outline">
                   แก้ไข
                 </button>
-                <EditEmployee
-                  v-if="showEditPopup"
-                  :employee="selectedEmployee"
-                  @close="closeEditPopup"
-                  @update="updateEmployee"
-                  @edited="fetchEmployees"
-                />
+                <EditEmployee v-if="showEditPopup" :employee="selectedEmployee" @close="closeEditPopup"
+                  @update="updateEmployee" @edited="fetchEmployees" />
 
-                <button
-                  @click="deleteEmployee(employee._id)"
-                  type="button"
-                  class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 ml-3 rounded focus:outline-none focus:shadow-outline"
-                >
+                <button @click="deleteEmployee(employee._id)" type="button"
+                  class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 ml-3 rounded focus:outline-none focus:shadow-outline">
                   ลบ
                 </button>
               </td>
@@ -131,13 +101,8 @@ export default {
   computed: {
     displayedEmployees() {
       const filtered = this.employees.filter(
-        (employee) =>
-          employee.employee_name
-            .toLowerCase()
-            .includes(this.searchTerm.toLowerCase()) ||
-          employee.employee_phone
-            .toLowerCase()
-            .includes(this.searchTerm.toLowerCase())
+        (employee) => employee.fristname.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          employee.tel.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
       return filtered;
     },
@@ -146,7 +111,7 @@ export default {
   methods: {
     async fetchEmployees() {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_ALL}/employee`);
+        const res = await axios.get(`${import.meta.env.VITE_API_ALL}employee`);
         if (res.status === 200 && res.data && Array.isArray(res.data.data)) {
           this.employees = res.data.data;
         } else {

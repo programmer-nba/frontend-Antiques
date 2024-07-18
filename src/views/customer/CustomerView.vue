@@ -4,14 +4,10 @@
       <div>
         <div class="flex items-center gap-x-3">
           <h1 class="text-2xl font-medium text-gray-800 ">ลูกค้า</h1>
-
           <span class="px-3 py-1 text-base text-[#BFEA7C] bg-[#416D19] rounded-full">{{ filteredCustomers.length }}
             รายการ</span>
         </div>
-
       </div>
-
-
     </div>
 
     <div class="mt-6 md:flex md:items-center md:justify-between">
@@ -35,7 +31,6 @@
           class="w-7 h-7">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-
         <span>เพิ่มลูกค้า</span>
       </button>
     </div>
@@ -50,41 +45,40 @@
           <table class="min-w-full  border border-[#9BCF53]">
             <thead class="bg-[#0A6847] border-b border-[#C3FF93] text-center text-white text-lg font-medium">
               <tr>
-                <th class="  px-4 py-4 ">
+                <th class="px-4 py-4 ">
                   ลำดับ
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   บัตรประชาชน
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   ระดับ
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   ชื่อเต็ม
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   ที่อยู่
                 </th>
-
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   ตำบล
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   อำเภอ
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   จังหวัด
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   รหัสไปรษณีย์
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   ป้ายทะเบียน
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   พนักงาน
                 </th>
-                <th class=" font-medium  px-4 py-4 ">
+                <th class="font-medium  px-4 py-4 ">
                   จัดการ
                 </th>
 
@@ -96,13 +90,13 @@
 
                 <td class="px-4 py-4 whitespace-nowrap">{{ index + 1 }}</td>
                 <td class=" px-4 py-4 whitespace-nowrap">
-                  {{ customer.id_card }}
+                  {{ customer.iden }}
                 </td>
                 <td class=" px-4 py-4 whitespace-nowrap">
                   {{ customer.level }}
                 </td>
                 <td class=" px-4 py-4 whitespace-nowrap">
-                  {{ customer.fullname }}
+                  {{ customer.prefix }} {{ customer.fristname }} {{ customer.lastname }}
                 </td>
                 <td class=" px-4 py-4 whitespace-nowrap">
                   {{ customer.address }}
@@ -129,18 +123,13 @@
                   <div class=" flex space-x-2 ">
                     <button @click="viewCustomer(customer)"
                       class="border-green-600 rounded text-white bg-green-600 text-base cursor-pointer border border-b-4 p-1 px-3 font-bold">ข้อมูล</button>
-
                     <button @click="editCustomer(customer)"
                       class="border-orange-600 rounded text-orange-900 text-base cursor-pointer border p-1 px-3 ml-auto hover:bg-orange-600 bg-orange-500 hover:text-white transform duration-300">แก้ไข</button>
-
-
                     <button @click="deleteCustomer(customer._id)"
                       class="border-red-600 rounded text-white bg-red-600 text-base cursor-pointer border border-b-4 p-1 px-3 font-bold">ลบ</button>
-
                   </div>
                 </td>
               </tr>
-
             </tbody>
           </table>
         </div>
@@ -195,23 +184,18 @@
   </div>
 
   <View :show="showViewPopup" :customer="selectedCustomer" @close="closeViewPopup" />
-
   <Edit :show="showEditPopup" :customer="selectedCustomer" @close="closeEditPopup" @update="updateCustomerList" />
-
-
   <Add v-if="showAddPopup" @close="closeAddPopup" @add="addCustomer" @added="fetchCustomers" />
-
   <!-- component -->
-
 </template>
 
 <script setup>
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { computed, onMounted, ref } from 'vue';
-import Add from './Add_Customer.vue';
-import Edit from './Edit_Customer.vue';
-import View from './View_Customer.vue';
+import Add from './AddCustomer.vue';
+import Edit from './EditCustomer.vue';
+import View from './DetailCustomer.vue';
 
 const customers = ref([]);
 const showAddPopup = ref(false);
@@ -251,7 +235,6 @@ const fetchCustomers = async () => {
     const response = await axios.get(`${import.meta.env.VITE_API_ALL}customer`);
     if (response.status === 200 && response.data && Array.isArray(response.data.data)) {
       customers.value = response.data.data;
-      console.log(customers.value);
     } else {
       console.error('Invalid response format or empty data array:', response.data);
     }
@@ -273,8 +256,8 @@ const closeViewPopup = () => {
 };
 const filteredCustomers = computed(() => {
   return customers.value.filter(customer =>
-    customer.fullname.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-    customer.id_card.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+    customer.fristname.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+    customer.iden.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
     customer.vehicle_code.toLowerCase().includes(searchTerm.value.toLowerCase())
   );
 });
@@ -341,4 +324,4 @@ const updateCustomerList = () => {
   closeEditPopup();
 };
 
-</script>
+</script>./AddCustomer.vue./DetailCustomer.vue

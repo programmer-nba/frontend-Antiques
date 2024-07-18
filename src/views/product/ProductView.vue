@@ -1,18 +1,12 @@
 <template>
   <div class="container mx-auto p-4">
     <!-- Modal for adding a new category -->
-    <add-category v-if="showModal" @close="closeModal" @added="fetchData" />
+    <AddProduct v-if="showModal" @close="closeModal" @added="fetchData" />
 
     <!-- Header -->
     <div class="mb-8 flex items-center justify-center">
-      <img
-        src="../../../assets/images/logo.png"
-        alt="Product Logo"
-        class="w-8 lg:w-10 mr-2"
-      />
-      <h1
-        class="text-2xl lg:text-4xl font-bold text-green-600 hover:text-green-700"
-      >
+      <img src="../../assets/images/logo.png" alt="Product Logo" class="w-8 lg:w-10 mr-2" />
+      <h1 class="text-2xl lg:text-4xl font-bold text-green-600 hover:text-green-700">
         จัดการสินค้าทั้งหมด
       </h1>
     </div>
@@ -27,61 +21,34 @@
             </h2>
             <button
               class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded transition-colors duration-300"
-              @click="openModal"
-            >
+              @click="openModal">
               <i class="fas fa-plus mr-2"></i> เพิ่ม
             </button>
           </div>
-          <input
-            v-model="searchProvince"
+          <input v-model="searchProvince"
             class="w-full px-2 py-1 mb-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-            placeholder="ค้นหาประเภทสินค้า"
-          />
+            placeholder="ค้นหาประเภทสินค้า" />
           <div class="border border-gray-300 rounded-lg p-2">
             <ul class="list-disc text-gray-700">
-              <li
-                v-for="(province, index) in filteredProvinces"
-                :key="province.id"
+              <li v-for="(province, index) in filteredProvinces" :key="province.id"
                 class="mb-2 cursor-pointer hover:text-green-600 transition-colors duration-300 flex items-center border border-gray-300 hover:bg-gray-200 rounded-lg p-2"
-                @click="selectProvince(province)"
-                :class="{ 'bg-gray-200': selectedProvince === province }"
-              >
+                @click="selectProvince(province)" :class="{ 'bg-gray-200': selectedProvince === province }">
                 <div class="flex-grow">{{ truncateName(province.name) }}</div>
                 <div class="relative">
-                  <button
-                    @click.stop="toggleMenu(index, 'province')"
-                    class="p-2 bg-green-500 text-white rounded"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 12h.01M12 12h.01M18 12h.01"
-                      />
+                  <button @click.stop="toggleMenu(index, 'province')" class="p-2 bg-green-500 text-white rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 12h.01M12 12h.01M18 12h.01" />
                     </svg>
                   </button>
-                  <div
-                    v-if="menuIndex === index && menuType === 'province'"
-                    class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10"
-                  >
+                  <div v-if="menuIndex === index && menuType === 'province'"
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10">
                     <ul class="py-1">
-                      <li
-                        @click="editProvinceModal(province)"
-                        class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      >
+                      <li @click="editProvinceModal(province)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                         แก้ไข
                       </li>
-                      <li
-                        @click="deleteProvinceConfirm(province)"
-                        class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      >
+                      <li @click="deleteProvinceConfirm(province)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                         ลบ
                       </li>
                     </ul>
@@ -102,65 +69,35 @@
             </h2>
             <button
               class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded transition-colors duration-300"
-              @click="addDistrict"
-              :disabled="!selectedProvince"
-            >
+              @click="addDistrict" :disabled="!selectedProvince">
               <i class="fas fa-plus mr-2"></i> เพิ่ม
             </button>
           </div>
-          <input
-            v-model="newDistrictName"
+          <input v-model="newDistrictName"
             class="w-full px-2 py-1 mb-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-            placeholder="ชื่อประเภทสินค้าย่อย"
-            :disabled="!selectedProvince"
-            required
-          />
+            placeholder="ชื่อประเภทสินค้าย่อย" :disabled="!selectedProvince" required />
           <div class="border border-gray-300 rounded-lg p-2">
             <ul class="list-disc text-gray-700">
-              <li
-                v-for="(district, index) in selectedDistricts"
-                :key="district.id"
+              <li v-for="(district, index) in selectedDistricts" :key="district.id"
                 class="mb-2 cursor-pointer hover:text-green-600 transition-colors duration-300 flex items-center border border-gray-300 hover:bg-gray-200 rounded-lg p-2"
-                @click="selectDistrict(district)"
-                :class="{ 'bg-gray-200': selectedDistrict === district }"
-              >
+                @click="selectDistrict(district)" :class="{ 'bg-gray-200': selectedDistrict === district }">
                 <div class="flex-grow flex items-center">
                   <span>{{ truncateName(district.name) }}</span>
                   <div class="relative ml-auto">
-                    <button
-                      @click.stop="toggleMenu(index, 'district')"
-                      class="p-2 bg-green-500 text-white rounded"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M6 12h.01M12 12h.01M18 12h.01"
-                        />
+                    <button @click.stop="toggleMenu(index, 'district')" class="p-2 bg-green-500 text-white rounded">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 12h.01M12 12h.01M18 12h.01" />
                       </svg>
                     </button>
-                    <div
-                      v-if="menuIndex === index && menuType === 'district'"
-                      class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10"
-                    >
+                    <div v-if="menuIndex === index && menuType === 'district'"
+                      class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10">
                       <ul class="py-1">
-                        <li
-                          @click="editDistrictModal(district)"
-                          class="px-4 py2 hover:bg-gray-100 cursor-pointer"
-                        >
+                        <li @click="editDistrictModal(district)" class="px-4 py2 hover:bg-gray-100 cursor-pointer">
                           แก้ไข
                         </li>
-                        <li
-                          @click="deleteDistrictConfirm(district)"
-                          class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        >
+                        <li @click="deleteDistrictConfirm(district)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                           ลบ
                         </li>
                       </ul>
@@ -176,76 +113,46 @@
       <div>
         <div class="md:col-span-2 lg:col-span-1">
           <div class="bg-white rounded-lg shadow-md p-4">
-            <div
-              class="flex flex-col lg:flex-row items-center justify-between mb-4"
-            >
-              <h2
-                class="text-lg lg:text-xl font-bold text-green-600 mb-2 lg:mb-0"
-              >
+            <div class="flex flex-col lg:flex-row items-center justify-between mb-4">
+              <h2 class="text-lg lg:text-xl font-bold text-green-600 mb-2 lg:mb-0">
                 ชื่อสินค้า
               </h2>
               <button
                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded transition-colors duration-300"
-                @click="addSubdistrict"
-                :disabled="!selectedDistrict"
-              >
+                @click="addSubdistrict" :disabled="!selectedDistrict">
                 <i class="fas fa-plus mr-2"></i> เพิ่ม
               </button>
             </div>
-            <input
-              v-model="newSubdistrictName"
+            <input v-model="newSubdistrictName"
               class="w-full px-2 py-1 mb-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-              placeholder="ชื่อสินค้า"
-              :disabled="!selectedDistrict"
-            />
+              placeholder="ชื่อสินค้า" :disabled="!selectedDistrict" />
             <div class="border border-gray-300 rounded-lg p-2">
               <ul class="list-disc text-gray-700">
-                <li
-                  v-for="(subdistrict, index) in selectedSubdistricts"
-                  :key="subdistrict.id"
+                <li v-for="(subdistrict, index) in selectedSubdistricts" :key="subdistrict.id"
                   class="mb-2 cursor-pointer hover:text-green-600 transition-colors duration-300 flex items-center border border-gray-300 hover:bg-gray-200 rounded-lg p-2"
-                  @click="selectSubdistrict(subdistrict)"
-                  :class="{
-                    'bg-gray-200': selectedSubdistrict === subdistrict,
-                  }"
-                >
+                  @click="selectSubdistrict(subdistrict)" :class="{
+      'bg-gray-200': selectedSubdistrict === subdistrict,
+    }">
                   <div class="flex-grow flex items-center">
                     <span>{{ truncateName(subdistrict.name) }}</span>
                     <div class="relative ml-auto">
-                      <button
-                        @click.stop="toggleMenu(index, 'subdistrict')"
-                        class="p-2 bg-green-500 text-white rounded"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 12h.01M12 12h.01M18 12h.01"
-                          />
+                      <button @click.stop="toggleMenu(index, 'subdistrict')"
+                        class="p-2 bg-green-500 text-white rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                          stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 12h.01M12 12h.01M18 12h.01" />
                         </svg>
                       </button>
-                      <div
-                        v-if="menuIndex === index && menuType === 'subdistrict'"
-                        class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10"
-                      >
+                      <div v-if="menuIndex === index && menuType === 'subdistrict'"
+                        class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10">
                         <ul class="py-1">
-                          <li
-                            @click="editSubdistrictModal(subdistrict)"
-                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          >
+                          <li @click="editSubdistrictModal(subdistrict)"
+                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                             แก้ไข
                           </li>
-                          <li
-                            @click="deleteSubdistrictConfirm(subdistrict)"
-                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          >
+                          <li @click="deleteSubdistrictConfirm(subdistrict)"
+                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                             ลบ
                           </li>
                         </ul>
@@ -263,31 +170,22 @@
       <div>
         <div class="md:col-span-2 lg:col-span-1">
           <div class="bg-white rounded-lg shadow-md p-4">
-            <div
-              class="flex flex-col lg:flex-row items-center justify-between mb-4"
-            >
-              <h2
-                class="text-lg lg:text-xl font-bold text-green-600 mb-2 lg:mb-0"
-              >
+            <div class="flex flex-col lg:flex-row items-center justify-between mb-4">
+              <h2 class="text-lg lg:text-xl font-bold text-green-600 mb-2 lg:mb-0">
                 ราคา/กก
               </h2>
               <button
                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded transition-colors duration-300"
-                @click="addPriceModal"
-                :disabled="!selectedSubdistrict"
-              >
+                @click="addPriceModal" :disabled="!selectedSubdistrict">
                 <i class="fas fa-plus mr-2"></i> เพิ่ม
               </button>
             </div>
 
             <div class="border border-gray-300 rounded-lg p-2">
               <ul class="list-disc text-gray-700">
-                <li
-                  v-for="(price, index) in selectedPrices"
-                  :key="price.id"
+                <li v-for="(price, index) in selectedPrices" :key="price.id"
                   class="mb-2 flex items-center justify-between border border-gray-300 rounded-lg p-2"
-                  @click="selectPrice(price)"
-                >
+                  @click="selectPrice(price)">
                   <div v-if="price.cate_id && price.type_id && price.detail_id">
                     <div>
                       <span>{{ `ราคา ระดับ 1: ${price.price_lv_1} บาท` }}</span>
@@ -310,40 +208,20 @@
                   </div>
 
                   <div class="relative ml-auto">
-                    <button
-                      @click.stop="toggleMenu(index, 'price')"
-                      class="p-2 bg-green-500 text-white rounded"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M6 12h.01M12 12h.01M18 12h.01"
-                        />
+                    <button @click.stop="toggleMenu(index, 'price')" class="p-2 bg-green-500 text-white rounded">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 12h.01M12 12h.01M18 12h.01" />
                       </svg>
                     </button>
-                    <div
-                      v-if="menuIndex === index && menuType === 'price'"
-                      class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10"
-                    >
+                    <div v-if="menuIndex === index && menuType === 'price'"
+                      class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-10">
                       <ul class="py-1">
-                        <li
-                          @click="editPriceModal(price)"
-                          class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        >
+                        <li @click="editPriceModal(price)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                           แก้ไข
                         </li>
-                        <li
-                          @click="deletePriceConfirm(price)"
-                          class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        >
+                        <li @click="deletePriceConfirm(price)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                           ลบ
                         </li>
                       </ul>
@@ -360,12 +238,12 @@
 </template>
 <script>
 import axios from "axios";
-import AddCategory from "./Add_Category.vue";
+import AddProduct from "./AddProduct.vue";
 import Swal from "sweetalert2";
 
 export default {
   components: {
-    AddCategory,
+    AddProduct,
   },
   data() {
     return {
@@ -399,25 +277,25 @@ export default {
     selectedDistricts() {
       return this.selectedProvince
         ? this.districts.filter(
-            (d) => d.provinceId === this.selectedProvince.id
-          )
+          (d) => d.provinceId === this.selectedProvince.id
+        )
         : [];
     },
     selectedSubdistricts() {
       return this.selectedDistrict
         ? this.subdistricts.filter(
-            (s) => s.districtId === this.selectedDistrict.id
-          )
+          (s) => s.districtId === this.selectedDistrict.id
+        )
         : [];
     },
     selectedPrices() {
       return this.selectedSubdistrict
         ? this.prices.filter(
-            (p) =>
-              p.cate_id === this.selectedProvince.id &&
-              p.type_id === this.selectedDistrict.id &&
-              p.detail_id === this.selectedSubdistrict.id
-          )
+          (p) =>
+            p.cate_id === this.selectedProvince.id &&
+            p.type_id === this.selectedDistrict.id &&
+            p.detail_id === this.selectedSubdistrict.id
+        )
         : [];
     },
   },
@@ -442,69 +320,72 @@ export default {
     selectPrice(price) {
       this.selectedPrice = price;
     },
-    fetchData() {
+    async fetchData() {
       this.empId = this.$store.getters.id;
-      axios
-        .get("http://147.50.183.57:9030/antiques/product/category")
-        .then((response) => {
-          this.provinces = response.data.data.map((item) => ({
-            id: item._id,
-            name: item.name,
-            empId: this.empId,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error fetching provinces:", error);
-        });
+      await axios.get(`${process.env.VITE_API_ALL}product/category`, {
+        headers: {
+          'auth-token': `Bearer ${localStorage.getItem('token')}`
+        }
+      }).then((res) => {
+        this.provinces = res.data.data.map((item) => ({
+          id: item._id,
+          name: item.name,
+          empId: this.empId,
+        }));
+      }).catch((error) => {
+        console.error("Error fetching provinces:", error);
+      });
 
-      axios
-        .get("http://147.50.183.57:9030/antiques/product/type")
-        .then((response) => {
-          this.districts = response.data.data.map((item) => ({
-            id: item._id,
-            provinceId: item.cate_id,
-            name: item.name,
-            empId: this.empId,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error fetching districts:", error);
-        });
+      await axios.get(`${process.env.VITE_API_ALL}product/type`, {
+        headers: {
+          'auth-token': `Bearer ${localStorage.getItem('token')}`
+        }
+      }).then((res) => {
+        this.districts = res.data.data.map((item) => ({
+          id: item._id,
+          provinceId: item.cate_id,
+          name: item.name,
+          empId: this.empId,
+        }));
+      }).catch((error) => {
+        console.error("Error fetching districts:", error);
+      });
 
-      axios
-        .get("http://147.50.183.57:9030/antiques/product/detail")
-        .then((response) => {
-          this.subdistricts = response.data.data.map((item) => ({
-            id: item._id,
-            districtId: item.type_id,
-            name: item.name,
-            empId: this.empId,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error fetching subdistricts:", error);
-        });
+      await axios.get(`${process.env.VITE_API_ALL}product/detail`, {
+        headers: {
+          'auth-token': `Bearer ${localStorage.getItem('token')}`
+        }
+      }).then((res) => {
+        this.subdistricts = res.data.data.map((item) => ({
+          id: item._id,
+          districtId: item.type_id,
+          name: item.name,
+          empId: this.empId,
+        }));
+      }).catch((error) => {
+        console.error("Error fetching subdistricts:", error);
+      });
 
-      axios
-        .get("http://147.50.183.57:9030/antiques/product/price")
-        .then((response) => {
-          console.log("Response data:", response.data); // Log the raw response data
-          this.prices = response.data.data.map((item) => ({
-            id: item._id,
-            cate_id: item.cate_id,
-            type_id: item.type_id,
-            detail_id: item.detail_id,
-            price_lv_1: item.price_lv_1,
-            price_lv_2: item.price_lv_3,
-            price_lv_3: item.price_lv_3,
-            price_lv_4: item.price_lv_4,
-            price_lv_5: item.price_lv_5,
-            emp: this.empId,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error fetching prices:", error);
-        });
+      await axios.get(`${process.env.VITE_API_ALL}product/price`, {
+        headers: {
+          'auth-token': `Bearer ${localStorage.getItem('token')}`
+        }
+      }).then((res) => {
+        this.prices = res.data.data.map((item) => ({
+          id: item._id,
+          cate_id: item.cate_id,
+          type_id: item.type_id,
+          detail_id: item.detail_id,
+          price_lv_1: item.price_lv_1,
+          price_lv_2: item.price_lv_3,
+          price_lv_3: item.price_lv_3,
+          price_lv_4: item.price_lv_4,
+          price_lv_5: item.price_lv_5,
+          emp: this.empId,
+        }));
+      }).catch((error) => {
+        console.error("Error fetching prices:", error);
+      });
     },
 
     addDistrict() {

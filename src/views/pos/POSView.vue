@@ -302,60 +302,57 @@
 
 <script>
 import axios from "axios"; // นำเข้า Axios
-import AddCustomer from "../Data_Customer/Add_Customer.vue";
+import AddCustomer from "../customer/AddCustomer.vue";
 import SelectCustomer from "./SelectCustomer.vue";
 import ReportPopup from "./ReportPopup.vue";
 
 export default {
-  name: "PosScreen",
   components: {
     AddCustomer,
     SelectCustomer,
     ReportPopup,
   },
-  data() {
-    return {
-      categories: [],
-      subcategories: [],
-      products: [],
+  async mounted() {
+    await this.startCamera();
+  },
+  data: () => ({
+    categories: [],
+    subcategories: [],
+    products: [],
 
-      customers: {
-        class: "",
-        id_card: "",
-        fullname: "",
-        vehicle_code: "",
-      },
-      selectedCustomer: {
-        class: "",
-        id_card: "",
-        fullname: "",
-        vehicle_code: "",
-        level: 1, // เพิ่มบรรทัดนี้
-      },
-      categorySelected: false,
-      subcategorySelected: false,
-      selectedCategory: null,
-      selectedSubcategory: null,
-      cartItems: [],
-      showAddPopup: false,
-      showCustomerPopup: false,
-      showReport: false,
-      showQuantityPopup: false,
-      showProductPopup: false,
-      quantityInput: 1,
-      selectedProduct: null,
-      showCamera: false,
-      stream: null,
-      videoPlayer: null,
-      capturedImage: null,
-      videoWidth: 640, // Set the desired width of the video player
-      videoHeight: 480, // Set the desired height of the video player
-      fetchQueue: false,
-    };
-  },
-  mounted() {
-    this.startCamera();
-  },
+    customers: {
+      class: "",
+      id_card: "",
+      fullname: "",
+      vehicle_code: "",
+    },
+    selectedCustomer: {
+      class: "",
+      id_card: "",
+      fullname: "",
+      vehicle_code: "",
+      level: null, // เพิ่มบรรทัดนี้
+    },
+    categorySelected: false,
+    subcategorySelected: false,
+    selectedCategory: null,
+    selectedSubcategory: null,
+    cartItems: [],
+    showAddPopup: false,
+    showCustomerPopup: false,
+    showReport: false,
+    showQuantityPopup: false,
+    showProductPopup: false,
+    quantityInput: 1,
+    selectedProduct: null,
+    showCamera: false,
+    stream: null,
+    videoPlayer: null,
+    capturedImage: null,
+    videoWidth: 640, // Set the desired width of the video player
+    videoHeight: 480, // Set the desired height of the video player
+    fetchQueue: false,
+  }),
 
   computed: {
     total() {
@@ -544,7 +541,7 @@ export default {
     async openQueue() {
       try {
         const { data } = await axios.post(
-          `${process.env.VITE_API_ALL}queue`,
+          `${process.env.VITE_API_ALL}order`,
           {
             customer_id: this.selectedCustomer?.id_card || "",
             product_detail: this.cartItems.map((item) => ({

@@ -1,11 +1,8 @@
 <template>
   <div
-    class="popup-overlay fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
-  >
+    class="popup-overlay fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
     <!-- Popup content -->
-    <div
-      class="popup-content bg-white border border-black rounded-lg overflow-auto max-h-[80vh]"
-    >
+    <div class="popup-content bg-white border border-black rounded-lg overflow-auto max-h-[80vh]">
       <div>
         <!-- Form for adding a customer -->
         <form @submit.prevent="f" class="p-6">
@@ -16,101 +13,47 @@
             </h3>
 
             <!-- Close button -->
-            <button
-              @click.prevent="ModalClose"
-              class="text-red-500 hover:text-red-700 border-2 border-red-500 hover:border-red-700 rounded-full p-1"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+            <button @click.prevent="ModalClose"
+              class="text-red-500 hover:text-red-700 border-2 border-red-500 hover:border-red-700 rounded-full p-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
           <!-- Customer full name -->
           <div class="col-span-1 lg:col-span-4">
-            <label
-              for="fullname"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >ชื่อ-สกุล</label
-            >
-            <input
-              v-model="formData.fullname"
-              type="text"
-              name="fullname"
-              id="fullname"
+            <label for="fullname" class="block mb-2 text-sm font-medium text-gray-900">ชื่อ-สกุล</label>
+            <input v-model="formData.fullname" type="text" name="fullname" id="fullname"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-              placeholder="ป้อน ชื่อเต็ม"
-              required
-            />
+              placeholder="ป้อน ชื่อเต็ม" required />
           </div>
 
           <!-- Customer details -->
           <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-4">
             <!-- Customer full name -->
             <div class="col-span-1 lg:col-span-2">
-              <label
-                for="id_card"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >บัตรประชาชน</label
-              >
-              <input
-                v-model="formData.id_card"
-                type="text"
-                name="id_card"
-                id="id_card"
+              <label for="id_card" class="block mb-2 text-sm font-medium text-gray-900">บัตรประชาชน</label>
+              <input v-model="formData.id_card" type="text" name="id_card" id="id_card"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                placeholder="ป้อน บัตรประชาชน"
-                required
-              />
+                placeholder="ป้อน บัตรประชาชน" required />
             </div>
 
             <div class="col-span-1 lg:col-span-2">
-              <label
-                for="tel"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >เบอร์โทรศัพท์</label
-              >
-              <input
-                v-model="formData.tel"
-                type="text"
-                name="tel"
-                id="tel"
+              <label for="tel" class="block mb-2 text-sm font-medium text-gray-900">เบอร์โทรศัพท์</label>
+              <input v-model="formData.tel" type="text" name="tel" id="tel"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                placeholder="ป้อน ระดับ"
-                required
-              />
+                placeholder="ป้อน ระดับ" required />
             </div>
 
             <!-- Customer class -->
             <div class="col-span-1 lg:col-span-2">
-              <label
-                for="level"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >ระดับ</label
-              >
-              <select
-                v-model="formData.level"
-                name="level"
-                id="level"
+              <label for="level" class="block mb-2 text-sm font-medium text-gray-900">ระดับ</label>
+              <select v-model="formData.level" name="level" id="level"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
-              >
+                required>
                 <option value="" disabled selected>กรุณาเลือกระดับ</option>
-                <option
-                  v-for="level in [1, 2, 3, 4, 5]"
-                  :key="level"
-                  :value="level"
-                >
+                <option v-for="level in [1, 2, 3, 4, 5]" :key="level" :value="level">
                   {{ level }}
                 </option>
               </select>
@@ -118,60 +61,28 @@
 
             <!-- Customer vehicle code -->
             <div class="col-span-1 lg:col-span-2">
-              <label
-                for="vehicle_code"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >ป้ายทะเบียน</label
-              >
-              <input
-                v-model="formData.vehicle_code"
-                type="text"
-                name="vehicle_code"
-                id="vehicle_code"
+              <label for="vehicle_code" class="block mb-2 text-sm font-medium text-gray-900">ป้ายทะเบียน</label>
+              <input v-model="formData.vehicle_code" type="text" name="vehicle_code" id="vehicle_code"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                placeholder="ป้อน ป้ายทะเบียน"
-                required
-              />
+                placeholder="ป้อน ป้ายทะเบียน" required />
             </div>
 
             <!-- Customer address -->
             <div class="col-span-1 lg:col-span-4">
-              <label
-                for="address"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >ที่อยู่</label
-              >
-              <input
-                v-model="formData.address"
-                type="text"
-                name="address"
-                id="address"
+              <label for="address" class="block mb-2 text-sm font-medium text-gray-900">ที่อยู่</label>
+              <input v-model="formData.address" type="text" name="address" id="address"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                placeholder="ป้อน ที่อยู่"
-                required
-              />
+                placeholder="ป้อน ที่อยู่" required />
             </div>
 
             <!-- Province dropdown -->
             <div class="col-span-1 lg:col-span-2">
-              <label
-                for="province"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >จังหวัด</label
-              >
-              <select
-                v-model="formData.province"
-                name="province"
-                id="province"
+              <label for="province" class="block mb-2 text-sm font-medium text-gray-900">จังหวัด</label>
+              <select v-model="formData.province" name="province" id="province"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
-              >
+                required>
                 <option value="" disabled selected>กรุณาเลือกจังหวัด</option>
-                <option
-                  v-for="province in provinces"
-                  :value="province.id"
-                  :key="province.id"
-                >
+                <option v-for="province in provinces" :value="province.id" :key="province.id">
                   {{ province.name_th }}
                 </option>
               </select>
@@ -179,24 +90,12 @@
 
             <!-- Amphure dropdown -->
             <div v-if="formData.province" class="col-span-1 lg:col-span-2">
-              <label
-                for="district"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >อำเภอ</label
-              >
-              <select
-                v-model="formData.district"
-                name="district"
-                id="district"
+              <label for="district" class="block mb-2 text-sm font-medium text-gray-900">อำเภอ</label>
+              <select v-model="formData.district" name="district" id="district"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
-              >
+                required>
                 <option value="" disabled selected>กรุณาเลือกอำเภอ</option>
-                <option
-                  v-for="amphure in amphures"
-                  :value="amphure.id"
-                  :key="amphure.id"
-                >
+                <option v-for="amphure in amphures" :value="amphure.id" :key="amphure.id">
                   {{ amphure.name_th }}
                 </option>
               </select>
@@ -204,26 +103,12 @@
 
             <!-- Tambon dropdown -->
             <div v-if="formData.province" class="col-span-1 lg:col-span-2">
-              <label
-                for="subdistrict"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >ตำบล</label
-              >
-              <select
-                v-model="formData.subdistrict"
-                name="subdistrict"
-                id="subdistrict"
+              <label for="subdistrict" class="block mb-2 text-sm font-medium text-gray-900">ตำบล</label>
+              <select v-model="formData.subdistrict" name="subdistrict" id="subdistrict"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                @change="updatePostcode"
-                required
-              >
+                @change="updatePostcode" required>
                 <option value="" disabled selected>กรุณาเลือกตำบล</option>
-                <option
-                  v-for="tambon in tambons"
-                  :value="tambon.id"
-                  :key="tambon.id"
-                  :data-postcode="tambon.zip_code"
-                >
+                <option v-for="tambon in tambons" :value="tambon.id" :key="tambon.id" :data-postcode="tambon.zip_code">
                   {{ tambon.name_th }}
                 </option>
               </select>
@@ -231,34 +116,21 @@
 
             <!-- Customer postcode -->
             <div v-if="formData.province" class="col-span-1 lg:col-span-2">
-              <label
-                for="postcode"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >รหัสไปรษณีย์</label
-              >
-              <input
-                v-model="formData.postcode"
-                type="text"
-                name="postcode"
-                id="postcode"
+              <label for="postcode" class="block mb-2 text-sm font-medium text-gray-900">รหัสไปรษณีย์</label>
+              <input v-model="formData.postcode" type="text" name="postcode" id="postcode"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                readonly
-              />
+                readonly />
             </div>
           </div>
 
           <!-- Save and cancel buttons -->
           <div class="p-3 mt-2 text-center space-x-4 md:block">
-            <button
-              type="submit"
-              class="mb-2 md:mb-0 bg-indigo-500 border px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-indigo-600"
-            >
+            <button type="submit"
+              class="mb-2 md:mb-0 bg-indigo-500 border px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-indigo-600">
               เพิ่ม
             </button>
-            <button
-              @click.prevent="ModalClose"
-              class="mb-2 md:mb-0 bg-red-500 border px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-red-600"
-            >
+            <button @click.prevent="ModalClose"
+              class="mb-2 md:mb-0 bg-red-500 border px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-red-600">
               ยกเลิก
             </button>
           </div>
@@ -450,15 +322,15 @@ export default {
   transition: transform 0.4s;
 }
 
-.switch input:checked + .slider {
+.switch input:checked+.slider {
   background-color: #15ff00;
 }
 
-.switch input:focus + .slider {
+.switch input:focus+.slider {
   box-shadow: 0 0 1px #ffffff;
 }
 
-.switch input:checked + .slider:before {
+.switch input:checked+.slider:before {
   transform: translateX(26px);
 }
 </style>
