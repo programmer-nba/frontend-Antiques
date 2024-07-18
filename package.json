@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 1112",
     "build": "vite build",
     "preview": "vite preview",
     "deploy:test": "scp -r dist/* nbadigital@147.50.183.57:/var/www/antiquse.nbadigitalsuccessmore.com"
